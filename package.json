@@ -1,0 +1,23 @@
+{
+  "name": "coronavirus-kw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ENV_PATH=.env.local node -r ./backend/envLoader.js server.js",
+    "prod": "ENV_PATH=.env node -r ./backend/envLoader.js server.js"
+  },
+  "author": "Abdullah Alabbad",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^6.3.1",
+    "ejs": "^3.1.5",
+    "mysql2": "^2.2.5",
+    "pikaday": "^1.8.2",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}

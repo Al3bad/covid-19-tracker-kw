@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coronavirus Cases Tracker in Kuwait</title>
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="index.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div>
+        <h1><%= title %></h1>
+      </div>
+    </nav>
+    <main>
+      <!-- Today's Statists -->
+      <div class="container">
+        <div class="today">
+          <h3>Today statistics:</h3>
+          <div class="today-grid">
+            <div class="new-cases">
+              <p>New Cases</p>
+              <p><%= today.newCases %></p>
+            </div>
+            <div class="new-deaths">
+              <p>New Deaths</p>
+              <p><%= today.newDeaths %></p>
+            </div>
+            <div class="new-recoveries">
+              <p>New Recoveries</p>
+              <p><%= today.newRecoveries %></p>
+            </div>
+            <div class="new-tests">
+              <p>New Tests</p>
+              <p><%= today.newTests %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="charts">
+          <div class="chart-container">
+            <h3>Total Cases:</h3>
+            <div>
+              <svg class="total-cases-chart"></svg>
+            </div>
+          </div>
+          <!-- Bar Charts -->
+          <div class="chart-container">
+            <h3>Daily Cases:</h3>
+            <div>
+              <svg class="cases-chart"></svg>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h3>Daily Deaths:</h3>
+            <div>
+              <svg class="deaths-chart"></svg>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h3>Daily Recoveries:</h3>
+            <div>
+              <svg class="recoveries-chart"></svg>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h3>Daily Tests:</h3>
+            <div>
+              <svg class="tests-chart"></svg>
+            </div>
+          </div>
+          <!-- Line Charts -->
+          <div class="chart-container">
+            <h3>Active Cases:</h3>
+            <div>
+              <svg class="active-cases-chart"></svg>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h3>Serious Cases:</h3>
+            <div>
+              <svg class="icu-chart"></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Form -->
+      <div class="container">
+        <form>
+          <div class="input-container">
+            <label for="date">Date:</label>
+            <input type="text" name="text" id="date" />
+          </div>
+          <div class="input-container">
+            <label for="new-cases">New Cases:</label>
+            <input type="number" name="newCases" id="new-cases" />
+          </div>
+          <div class="input-container">
+            <label for="new-deaths">New Deaths:</label>
+            <input type="number" name="newDeaths" id="new-deaths" />
+          </div>
+          <div class="input-container">
+            <label for="new-recoveries">New Recoveries:</label>
+            <input type="number" name="newRecoveries" id="new-recoveries" />
+          </div>
+          <div class="input-container">
+            <label for="new-tests">New Tests:</label>
+            <input type="number" name="newTests" id="new-tests" />
+          </div>
+          <div class="input-container">
+            <label for="active-cases">Active Cases:</label>
+            <input type="number" name="activeCases" id="active-cases" />
+          </div>
+          <div class="input-container">
+            <label for="icu">ICU:</label>
+            <input type="number" name="icu" id="icu" />
+          </div>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
