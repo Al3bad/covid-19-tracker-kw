@@ -20,7 +20,7 @@ const Reset = "\x1b[0m";
 const Dim = "\x1b[2m";
 const FgYellow = "\x1b[33m";
 
-const logData = (pathname) => {
+const logPathname = (pathname) => {
   console.log(`\n${Dim}[ ${FgYellow}${pathname}${Reset}${Dim} ]${Reset}\n`);
 };
 const logEnd = () => {
@@ -98,7 +98,7 @@ const server = http.createServer((req, res) => {
         body = null;
       }
 
-      logData(pathname);
+      logPathname(pathname);
 
       // other routes
       const chosenHandler = router[pathname] ? router[pathname] : handlers.notFound;
@@ -162,7 +162,7 @@ handlers.home = (data, callback) => {
 
     const result = await Case.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
-      order: [['date', 'DESC']],
+      order: [["date", "DESC"]],
       limit: 1,
       raw: true,
     });

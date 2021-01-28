@@ -30977,20 +30977,20 @@ var Chart = /*#__PURE__*/function () {
     });
 
     _defineProperty(this, "xAxis", function (g) {
-      return g.attr("transform", "translate(".concat(0, ", ", _this.height - _this.marginBottom * 2.5, ")")) // position of the x Axis group
-      .call(d3.axisBottom(_this.xScale).ticks(d3.timeDay.every(5))) // format ticks text
+      return g.attr("transform", "translate(".concat(0, ", ", _this.height - _this.marginBottom * 3, ")")) // position of the x Axis group
+      .call(d3.axisBottom(_this.xScale).ticks(5)) // format ticks text
       .call(function (g) {
         return g.select(".domain").remove();
       });
     });
 
     _defineProperty(this, "yAxis", function (g) {
-      return g.attr("transform", "translate(".concat(_this.marginLeft * 2, ",", 0, ")")).call(d3.axisLeft(_this.yScale).tickSize(_this.marginLeft * 2 + _this.marginRight - _this.width).tickValues([0, Math.floor(_this.maxY * 0.3), Math.floor(_this.maxY * 0.6), Math.floor(_this.maxY * 0.9)])).call(function (g) {
+      return g.attr("transform", "translate(".concat(_this.marginLeft * 2, ",", 0, ")")).call(d3.axisRight(_this.yScale).tickSize(_this.width - _this.marginLeft * 3 - _this.marginRight).tickFormat(_this.valFormater).tickValues([0, Math.floor(_this.maxY * 0.3), Math.floor(_this.maxY * 0.6), Math.floor(_this.maxY * 0.9)])).call(function (g) {
         return g.select(".domain").remove();
       }).call(function (g) {
         return g.selectAll(".tick:not(:first-of-type) line").attr("stroke-opacity", 0.3).attr("stroke-dasharray", "2,2");
       }).call(function (g) {
-        return g.selectAll(".tick text").attr("x", 0).attr("dy", -5);
+        return g.selectAll(".tick text").attr("x", -10).attr("dy", -5);
       });
     });
 
@@ -31069,13 +31069,14 @@ var Chart = /*#__PURE__*/function () {
     this.marginRight = marginRight || marginX || 35;
     this._xLabel = xLabel || "x-label";
     this._yLabel = yLabel || "y-label";
-    this.yScale = d3.scaleLinear().domain([0, this.maxY]).range([this.height - this.marginBottom * 2.5, this.marginTop]).nice();
+    this.yScale = d3.scaleLinear().domain([0, this.maxY]).range([this.height - this.marginBottom * 3, this.marginTop]).nice();
     this.xScale = d3.scaleTime().domain(d3.extent(x, function (d) {
       return d;
-    })).range([this.marginLeft * 3, this.width - this.marginRight * 2]);
+    })).range([this.marginLeft * 3, this.width - this.marginRight * 3]);
     this.color = d3.rgb(color).darker(0.3) || "gray";
     this.colorHover = color;
     this.dateFormater = d3.timeFormat("%d %b %Y");
+    this.valFormater = d3.format(".2s");
   }
 
   _createClass(Chart, [{
@@ -38253,29 +38254,34 @@ picker.setDate(new Date()); // =============================== //
 // =============================== //
 // Global chart settings
 
+var ratio = {
+  width: 16,
+  height: 9
+};
 var chartLaptop = {
-  width: 992,
-  height: 558,
-  marginX: 50,
-  marginY: 35
+  width: ratio.width * 60,
+  height: ratio.height * 60,
+  marginX: 40,
+  marginY: 25
 };
 var chartTablet = {
-  width: 752,
-  height: 423,
-  marginX: 50,
-  marginY: 35
+  width: ratio.width * 47,
+  height: ratio.height * 47,
+  marginX: 40,
+  marginY: 25
 };
 var chartMobile = {
-  width: 512,
-  height: 288,
-  marginX: 25,
+  width: ratio.width * 32,
+  height: ratio.height * 32,
+  marginX: 20,
   marginY: 20
 };
 var chartMobileSl = {
-  width: 352,
-  height: 198,
-  marginX: 25,
-  marginY: 20
+  width: ratio.width * 23,
+  height: ratio.height * 35,
+  marginX: 20,
+  marginY: 20,
+  marginRight: 15
 }; // Fetch the data then draw the charts
 
 var data = [];
@@ -38298,29 +38304,8 @@ d3.json("/api/cases").then(function (cases) {
       date: d
     });
   });
-  var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-  var vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0); // if (vw > 1100) chart = chartLaptop;
-  // else if (vw > 800) chart = chartTablet;
-  // else if (vw > 500) chart = chartMobile;
-  // else chart = chartMobileSl;
-  // currentChart = chart;
-
-  currentChart = chartLaptop;
-  console.log(vw, vh); // window.addEventListener("resize", (e) => {
-  //   vw = window.innerWidth;
-  //   vh = window.innerHeight;
-  //   if (vw > 1100) chart = chartLaptop;
-  //   else if (vw > 800) chart = chartTablet;
-  //   else if (vw > 500) chart = chartMobile;
-  //   else chart = chartMobileSl;
-  //   if (chart.width !== currentChart.width) {
-  //     console.log("View has changed!");
-  //     currentChart = chart;
-  //     drawCharts();
-  //   }
-  // });
-
-  drawCharts();
+  changeChartSettings();
+  window.addEventListener("resize", changeChartSettings);
 });
 
 var drawCharts = function drawCharts() {
@@ -38472,6 +38457,20 @@ form.onsubmit = function (e) {
   }).then(function (res) {
     return location.reload();
   });
+}; // =============================== //
+// --> Chart Settings Handler <--  //
+// =============================== //
+
+
+var changeChartSettings = function changeChartSettings() {
+  var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+  if (vw > 1100) chart = chartLaptop;else if (vw > 800) chart = chartTablet;else if (vw > 500) chart = chartMobile;else chart = chartMobileSl;
+
+  if (chart.width !== currentChart.width) {
+    console.log("View has changed!");
+    currentChart = chart;
+    drawCharts();
+  }
 };
 },{"d3":"../node_modules/d3/index.js","./chartClass":"chartClass.js","pikaday":"../node_modules/pikaday/pikaday.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -38501,7 +38500,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58180" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54501" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

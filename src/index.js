@@ -21,32 +21,34 @@ picker.setDate(new Date());
 // =============================== //
 
 // Global chart settings
+const ratio = { width: 16, height: 9 };
 const chartLaptop = {
-  width: 992,
-  height: 558,
-  marginX: 50,
-  marginY: 35,
+  width: ratio.width * 60,
+  height: ratio.height * 60,
+  marginX: 40,
+  marginY: 25,
 };
 
 const chartTablet = {
-  width: 752,
-  height: 423,
-  marginX: 50,
-  marginY: 35,
+  width: ratio.width * 47,
+  height: ratio.height * 47,
+  marginX: 40,
+  marginY: 25,
 };
 
 const chartMobile = {
-  width: 512,
-  height: 288,
-  marginX: 25,
+  width: ratio.width * 32,
+  height: ratio.height * 32,
+  marginX: 20,
   marginY: 20,
 };
 
 const chartMobileSl = {
-  width: 352,
-  height: 198,
-  marginX: 25,
+  width: ratio.width * 23,
+  height: ratio.height * 35,
+  marginX: 20,
   marginY: 20,
+  marginRight: 15,
 };
 
 // Fetch the data then draw the charts
@@ -72,37 +74,8 @@ d3.json("/api/cases").then((cases) => {
     return { ...cases[i], date: d };
   });
 
-  let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-  let vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-
-  // if (vw > 1100) chart = chartLaptop;
-  // else if (vw > 800) chart = chartTablet;
-  // else if (vw > 500) chart = chartMobile;
-  // else chart = chartMobileSl;
-
-  // currentChart = chart;
-
-  currentChart = chartLaptop;
-
-  console.log(vw, vh);
-
-  // window.addEventListener("resize", (e) => {
-  //   vw = window.innerWidth;
-  //   vh = window.innerHeight;
-
-  //   if (vw > 1100) chart = chartLaptop;
-  //   else if (vw > 800) chart = chartTablet;
-  //   else if (vw > 500) chart = chartMobile;
-  //   else chart = chartMobileSl;
-
-  //   if (chart.width !== currentChart.width) {
-  //     console.log("View has changed!");
-  //     currentChart = chart;
-  //     drawCharts();
-  //   }
-  // });
-
-  drawCharts();
+  changeChartSettings();
+  window.addEventListener("resize", changeChartSettings);
 });
 
 const drawCharts = () => {
@@ -218,4 +191,23 @@ form.onsubmit = (e) => {
   })
     .then((res) => res.json())
     .then((res) => location.reload());
+};
+
+// =============================== //
+// --> Chart Settings Handler <--  //
+// =============================== //
+
+const changeChartSettings = () => {
+  let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+
+  if (vw > 1100) chart = chartLaptop;
+  else if (vw > 800) chart = chartTablet;
+  else if (vw > 500) chart = chartMobile;
+  else chart = chartMobileSl;
+
+  if (chart.width !== currentChart.width) {
+    console.log("View has changed!");
+    currentChart = chart;
+    drawCharts();
+  }
 };

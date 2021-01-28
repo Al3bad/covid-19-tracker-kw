@@ -98,7 +98,7 @@ main .today .today-grid .new-recoveries {
 }
 main .today .today-grid .new-tests {
   grid-area: new-tests;
-  border-color: #587E8B
+  border-color: #587e8b;
 }
 
 main .today .today-grid div p {
@@ -157,7 +157,7 @@ input {
 
 .input-container {
   width: 50%;
-  min-width: 500px;
+  min-width: 300px;
   margin-bottom: 5px;
   padding: 5px;
   border: 1px solid lightgray;
@@ -205,31 +205,37 @@ footer {
   }
 }
 
-/*
-
 @media only screen and (max-width: 800px) {
+  nav {
+    padding: 0.2rem 0;
+    font-size: 12px;
+  }
+
   nav div {
-    max-width: 500px;
-    margin: auto;
+    /* max-width: 500px;
+    margin: auto; */
   }
 
   main .today .today-grid {
-    display: grid;
     padding: 0 10px;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 20px 20px;
     grid-template-areas:
       "new-cases new-deaths"
       "new-recoveries new-tests";
   }
 
-  main .container > div {
+  .label {
+    font-size: 12px;
+  }
+
+  /* main .container > div {
     max-width: 500px;
     margin: auto;
-  }
+  } */
 }
 
+/*
 @media only screen and (max-width: 500px) {
   nav div {
     max-width: 450px;

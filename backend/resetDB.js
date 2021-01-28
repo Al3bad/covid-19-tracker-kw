@@ -29,8 +29,9 @@ const resetDB = async () => {
     await Case.create({ date: "2021-01-23", newCases: 534, newDeaths: 0, newRecoveries: 439, icu: 50, activeCases: 6203, newTests: 8978 })
     await Case.create({ date: "2021-01-24", newCases: 384, newDeaths: 0, newRecoveries: 507, icu: 48, activeCases: 6080, newTests: 7695 })
     await Case.create({ date: "2021-01-25", newCases: 492, newDeaths: 2, newRecoveries: 513, icu: 51, activeCases: 6057, newTests: 7928 })
-    await Case.create({ date: "2021-01-26", newCases: 204, newDeaths: 1, newRecoveries: 229, icu: 42, activeCases: 3117, newTests: 2106 })
-    await Case.create({ date: "2021-01-27", newCases: 204, newDeaths: 1, newRecoveries: 229, icu: 42, activeCases: 3117, newTests: 2106 })
+    await Case.create({ date: "2021-01-26", newCases: 505, newDeaths: 3, newRecoveries: 537, icu: 49, activeCases: 6022, newTests: 8426 })
+    await Case.create({ date: "2021-01-27", newCases: 580, newDeaths: 0, newRecoveries: 436, icu: 44, activeCases: 6166, newTests: 11419 })
+    await Case.create({ date: "2021-01-28", newCases: 204, newDeaths: 1, newRecoveries: 229, icu: 42, activeCases: 3117, newTests: 2106 })
 };
 
 module.exports =  resetDB;

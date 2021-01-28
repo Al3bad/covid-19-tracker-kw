@@ -35,18 +35,19 @@ class Chart {
     this.yScale = d3
       .scaleLinear()
       .domain([0, this.maxY])
-      .range([this.height - this.marginBottom * 2.5, this.marginTop])
+      .range([this.height - this.marginBottom * 3, this.marginTop])
       .nice();
 
     this.xScale = d3
       .scaleTime()
       .domain(d3.extent(x, (d) => d))
-      .range([this.marginLeft * 3, this.width - this.marginRight * 2]);
+      .range([this.marginLeft * 3, this.width - this.marginRight * 3]);
 
     this.color = d3.rgb(color).darker(0.3) || "gray";
     this.colorHover = color;
 
     this.dateFormater = d3.timeFormat("%d %b %Y");
+    this.valFormater = d3.format(".2s")
   }
 
   xLabel = (text) => {
@@ -65,8 +66,8 @@ class Chart {
 
   xAxis = (g) =>
     g
-      .attr("transform", `translate(${0}, ${this.height - this.marginBottom * 2.5})`) // position of the x Axis group
-      .call(d3.axisBottom(this.xScale).ticks(d3.timeDay.every(5))) // format ticks text
+      .attr("transform", `translate(${0}, ${this.height - this.marginBottom * 3})`) // position of the x Axis group
+      .call(d3.axisBottom(this.xScale).ticks(5)) // format ticks text
       .call((g) => g.select(".domain").remove()); // remove the domain line
 
   yAxis = (g) =>
@@ -74,15 +75,20 @@ class Chart {
       .attr("transform", `translate(${this.marginLeft * 2},${0})`)
       .call(
         d3
-          .axisLeft(this.yScale)
-          .tickSize(this.marginLeft * 2 + this.marginRight - this.width)
+          .axisRight(this.yScale)
+          .tickSize(this.width - (this.marginLeft * 3) - this.marginRight)
+          .tickFormat(this.valFormater)
           .tickValues([0, Math.floor(this.maxY * 0.3), Math.floor(this.maxY * 0.6), Math.floor(this.maxY * 0.9)])
       )
       .call((g) => g.select(".domain").remove())
       .call((g) =>
         g.selectAll(".tick:not(:first-of-type) line").attr("stroke-opacity", 0.3).attr("stroke-dasharray", "2,2")
       )
-      .call((g) => g.selectAll(".tick text").attr("x", 0).attr("dy", -5));
+      .call((g) => g.selectAll(".tick text").attr("x", -10).attr("dy", -5));
+
+    // _formatValues = () => {
+    //   d3.format(".2s")(42e6);
+    // }
 
   drawChartVeiw = () => {
     this.svg.node().innerHTML = "";
