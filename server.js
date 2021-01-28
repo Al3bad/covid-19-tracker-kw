@@ -7,35 +7,21 @@ const ejs = require("ejs");
 const bundler = require("./backend/bundler");
 const Case = require("./backend/database");
 const init = require("./backend/resetDB");
+const logger = require("./backend/logger");
 
 // Server configuration
 const hostname = process.env.HOST || "127.0.0.1";
 const port = process.env.PORT || 3000;
 
 // =============================== //
-// -->         Loggers        <--  //
-// =============================== //
-
-const Reset = "\x1b[0m";
-const Dim = "\x1b[2m";
-const FgYellow = "\x1b[33m";
-
-const logPathname = (pathname) => {
-  console.log(`\n${Dim}[ ${FgYellow}${pathname}${Reset}${Dim} ]${Reset}\n`);
-};
-const logEnd = () => {
-  console.log(`\n${Dim}=============================${Reset}\n`);
-};
-
-// =============================== //
 // -->   Reading public dir   <--  //
 // =============================== //
 
 // read all static files
-console.log("\n\x1b[2m%s\x1b[0m", "Reading public directory ...");
+logger.task("Reading public directory ...");
 const staticFilesArr = fs.readdirSync("./src/public");
 console.log("Static Files: ", staticFilesArr);
-console.log("\n\x1b[2m%s\x1b[0m", "=============================\n");
+logger.seperator();
 
 // =============================== //
 // -->         Server         <--  //
@@ -98,7 +84,7 @@ const server = http.createServer((req, res) => {
         body = null;
       }
 
-      logPathname(pathname);
+      logger.pathname(pathname);
 
       // other routes
       const chosenHandler = router[pathname] ? router[pathname] : handlers.notFound;
@@ -123,7 +109,7 @@ const server = http.createServer((req, res) => {
         res.statusCode = statusCode;
         res.end(payloadStr);
 
-        logEnd();
+        logger.seperator();
       });
     });
 });
@@ -133,14 +119,16 @@ const server = http.createServer((req, res) => {
 // =============================== //
 
 server.listen(port, hostname, async () => {
-  console.log("\n\x1b[2m%s\x1b[0m", "Bundling front-end js ...");
-  await bundler();
-  console.log("\n\x1b[2m%s\x1b[0m", "=============================\n");
-  console.log("\n\x1b[2m%s\x1b[0m", "Creating/Reseting mySQL table ...");
+  if (process.env.NODE_ENV === "development") {
+    logger.task("Bundling front-end js ...");
+    await bundler();
+    logger.seperator();
+  }
+  logger.task("Creating/Reseting mySQL table ...");
   await init();
-  console.log("\n\x1b[2m%s\x1b[0m", "=============================\n");
-  console.log("\n\x1b[32m%s\x1b[0m", `Server running at http://${hostname}:${port}/`);
-  console.log("\n\x1b[2m%s\x1b[0m", "=============================\n");
+  logger.seperator();
+  logger.task(`Server running at http://${hostname}:${port}/  (${process.env.NODE_ENV} environment)`);
+  logger.seperator();
 });
 
 // =============================== //
