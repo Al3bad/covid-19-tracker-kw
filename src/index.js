@@ -190,7 +190,10 @@ form.onsubmit = (e) => {
     body: JSON.stringify({ date, newCases, newDeaths, newRecoveries, newTests, activeCases, icu }),
   })
     .then((res) => res.json())
-    .then((res) => location.reload());
+    .then((res) => {
+      console.log(res);
+      // location.reload()
+    });
 };
 
 // =============================== //

@@ -54,14 +54,15 @@ const server = http.createServer((req, res) => {
     const mimeType = mimeLookup[fileExtention];
 
     try {
+      if (!mimeType) throw { statusCode: 404, errorMessage: "Not Found" };
       const fileContent = fs.readFileSync(filePath, "utf8");
 
       res.writeHead(200, { "Content-Type": mimeType });
       return res.end(fileContent);
     } catch (err) {
       console.log(pathname + " : Not Found!");
-      res.writeHead(404);
-      return res.end({ statusCode: 404, msg: "Not Found!" });
+      res.writeHead(302, { Location: "/404" });
+      return res.end();
     }
   }
 
@@ -87,26 +88,33 @@ const server = http.createServer((req, res) => {
       logger.pathname(pathname);
 
       // other routes
-      const chosenHandler = router[pathname] ? router[pathname] : handlers.notFound;
+      const chosenHandler = router[pathname];
+      if (!chosenHandler) {
+        res.writeHead(302, { Location: "/404" });
+        return res.end();
+      }
       const data = { pathname, query, method, headers, body };
 
       chosenHandler(data, (statusCode, payload) => {
         statusCode = typeof statusCode === "number" ? statusCode : 200;
         let payloadStr = "";
+        let headers = {};
         if (typeof payload === "string") {
-          res.setHeader("Content-Type", "text/html");
+          headers["Content-Type"] = "text/html";
           payloadStr = payload;
         } else if (typeof payload === "object") {
-          res.setHeader("Content-Type", "application/json");
+          headers["Content-Type"] = "application/json";
           payloadStr = JSON.stringify(payload);
         } else {
-          res.setHeader("Content-Type", "application/json");
+          headers["Content-Type"] = "application/json";
           payloadStr = JSON.stringify({});
         }
 
         console.log("Status Code: ", statusCode);
+        console.log("Headers: ", headers);
+        console.log("Error: ", payload.error);
 
-        res.statusCode = statusCode;
+        res.writeHead(statusCode, headers);
         res.end(payloadStr);
 
         logger.seperator();
@@ -137,13 +145,13 @@ server.listen(port, hostname, async () => {
 
 const handlers = {};
 
-handlers.home = (data, callback) => {
-  if (data.method !== "get") callback(404);
+handlers.home = async (data, callback) => {
+  try {
+    if (data.method !== "get") throw { statusCode: 404, errorMessage: "Not Found" };
 
-  const ejsTemplate = path.join(__dirname, "src", "ejs", "index.ejs");
+    const ejsTemplate = path.join(__dirname, "src", "ejs", "index.ejs");
 
-  fs.readFile(ejsTemplate, "utf8", async (err, data) => {
-    if (err) callback(500, { error: err });
+    const ejsData = await readFileAsync(ejsTemplate);
 
     const title = "COVID-19 Cases";
     const currentDate = new Date().toISOString().slice(0, 10);
@@ -160,39 +168,73 @@ handlers.home = (data, callback) => {
     console.log(today);
 
     // set res body
-    let html = ejs.render(data, { title, today });
+    let html = ejs.render(ejsData, { title, today });
     callback(200, html);
-  });
+  } catch (err) {
+    callback(err.statusCode || 500, { error: err.errorMessage || "Server Error" });
+  }
 };
 
 handlers.getCases = async (data, callback) => {
-  if (data.method !== "get") callback(404);
   try {
+    if (data.method !== "get") throw { statusCode: 404, errorMessage: "Not Found" };
     const cases = await Case.findAll({ attributes: { exclude: ["createdAt", "updatedAt"] }, order: [["date", "ASC"]] });
     callback(200, cases);
   } catch (err) {
-    callback(500, { error: err });
+    callback(err.statusCode || 500, { error: err.errorMessage || "Server Error" });
   }
 };
 
 handlers.addRecord = async (data, callback) => {
-  if (data.method !== "post") callback(404);
   try {
-    // const { newCases, newDeaths, newRecoveries, newTests, activeCases, icu } = data.body;
-    await Case.create(data.body);
-    callback(201, { msg: "New record was added!" });
+    if (data.method !== "post") throw { statusCode: 404, errorMessage: "Not Found" };
+
+    const { date, newCases, newDeaths, newRecoveries, newTests, activeCases, icu } = data.body;
+    const body = [date, newCases, newDeaths, newRecoveries, newTests, activeCases, icu];
+
+    body.forEach((val) => {
+      if (val === undefined || val === null || val === "") {
+        console.log(val + " is invalid");
+        throw { statusCode: 400, errorMessage: "Not enough information" };
+      }
+    });
+    const rowExists = await Case.findOne({ where: { date }, raw: true });
+
+    console.log("Data Exists? : ", rowExists ? true : false);
+    if (rowExists) throw { statusCode: 400, errorMessage: "Data for this date already exists" };
+    else {
+      await Case.create(data.body);
+      callback(201, { errorMessage: "New record was added!" });
+    }
   } catch (err) {
-    callback(500, { error: err });
+    callback(err.statusCode || 500, { error: err.errorMessage || "Server Error" });
   }
 };
 
-handlers.notFound = (data, callback) => {
-  callback(404);
+handlers.notFound = async (data, callback) => {
+  try {
+    const notFoundPage = path.join(__dirname, "src", "public", "404.html");
+    const data = await readFileAsync(notFoundPage);
+    callback(404, data);
+  } catch (err) {
+    callback(err.statusCode || 500, { error: "Server Error" });
+  }
 };
 
 // Define request route
 const router = {
   "/": handlers.home,
+  "/404": handlers.notFound,
   "/api/cases": handlers.getCases,
   "/api/add-record": handlers.addRecord,
+};
+
+// Function that reads files asynchronously
+const readFileAsync = (path) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, "utf8", (err, data) => {
+      if (err) reject({ statusCode: 500, errorMessage: "Server Error" });
+      resolve(data);
+    });
+  });
 };

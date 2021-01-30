@@ -38455,7 +38455,7 @@ form.onsubmit = function (e) {
   }).then(function (res) {
     return res.json();
   }).then(function (res) {
-    return location.reload();
+    console.log(res); // location.reload()
   });
 }; // =============================== //
 // --> Chart Settings Handler <--  //
@@ -38500,7 +38500,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56966" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65479" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
