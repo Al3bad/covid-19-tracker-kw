@@ -30927,138 +30927,98 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // =============================== //
 // -->        Base Class      <--  //
 // =============================== //
-var Chart = /*#__PURE__*/function () {
-  function Chart(_ref) {
-    var _this = this;
+class Chart {
+  constructor(_ref) {
+    let {
+      selector,
+      x,
+      y,
+      xLabel,
+      yLabel,
+      color,
+      config
+    } = _ref;
 
-    var selector = _ref.selector,
-        x = _ref.x,
-        y = _ref.y,
-        xLabel = _ref.xLabel,
-        yLabel = _ref.yLabel,
-        color = _ref.color,
-        config = _ref.config;
-
-    _classCallCheck(this, Chart);
-
-    _defineProperty(this, "xLabel", function (text) {
-      text.attr("class", "label").text(_this._xLabel).attr("transform", "translate(".concat(_this.width / 2, ", ").concat(_this.height - _this.marginBottom, ")"));
+    _defineProperty(this, "xLabel", text => {
+      text.attr("class", "label").text(this._xLabel).attr("transform", "translate(".concat(this.width / 2, ", ").concat(this.height - this.marginBottom, ")"));
     });
 
-    _defineProperty(this, "yLabel", function (text) {
-      text.attr("class", "label").text(_this._yLabel).attr("transform", "translate(".concat(_this.marginLeft, ", ").concat(_this.height / 2, ") rotate(-90)"));
+    _defineProperty(this, "yLabel", text => {
+      text.attr("class", "label").text(this._yLabel).attr("transform", "translate(".concat(this.marginLeft, ", ").concat(this.height / 2, ") rotate(-90)"));
     });
 
-    _defineProperty(this, "xAxis", function (g) {
-      return g.attr("transform", "translate(".concat(0, ", ", _this.height - _this.marginBottom * 3, ")")) // position of the x Axis group
-      .call(d3.axisBottom(_this.xScale).ticks(5)) // format ticks text
-      .call(function (g) {
-        return g.select(".domain").remove();
-      });
+    _defineProperty(this, "xAxis", g => g.attr("transform", "translate(".concat(0, ", ", this.height - this.marginBottom * 3, ")")) // position of the x Axis group
+    .call(d3.axisBottom(this.xScale).ticks(5)) // format ticks text
+    .call(g => g.select(".domain").remove()));
+
+    _defineProperty(this, "yAxis", g => g.attr("transform", "translate(".concat(this.marginLeft * 2, ",", 0, ")")).call(d3.axisRight(this.yScale).tickSize(this.width - this.marginLeft * 3 - this.marginRight).tickFormat(this.valFormater).tickValues([0, Math.floor(this.maxY * 0.3), Math.floor(this.maxY * 0.6), Math.floor(this.maxY * 0.9)])).call(g => g.select(".domain").remove()).call(g => g.selectAll(".tick:not(:first-of-type) line").attr("stroke-opacity", 0.3).attr("stroke-dasharray", "2,2")).call(g => g.selectAll(".tick text").attr("x", -10).attr("dy", -5)));
+
+    _defineProperty(this, "drawChartVeiw", () => {
+      this.svg.node().innerHTML = "";
+      this.svg.append("g").call(this.xAxis);
+      this.svg.append("g").call(this.yAxis);
+      this.svg.append("text").call(this.xLabel);
+      this.svg.append("text").call(this.yLabel);
     });
 
-    _defineProperty(this, "yAxis", function (g) {
-      return g.attr("transform", "translate(".concat(_this.marginLeft * 2, ",", 0, ")")).call(d3.axisRight(_this.yScale).tickSize(_this.width - _this.marginLeft * 3 - _this.marginRight).tickFormat(_this.valFormater).tickValues([0, Math.floor(_this.maxY * 0.3), Math.floor(_this.maxY * 0.6), Math.floor(_this.maxY * 0.9)])).call(function (g) {
-        return g.select(".domain").remove();
-      }).call(function (g) {
-        return g.selectAll(".tick:not(:first-of-type) line").attr("stroke-opacity", 0.3).attr("stroke-dasharray", "2,2");
-      }).call(function (g) {
-        return g.selectAll(".tick text").attr("x", -10).attr("dy", -5);
-      });
-    });
+    _defineProperty(this, "showDetails", (e, d) => {
+      const element = e.target;
+      const xVal = d.x || d[0];
+      const yVal = d.y || d[1]; // Show Hover color on the bar
 
-    _defineProperty(this, "drawChartVeiw", function () {
-      _this.svg.node().innerHTML = "";
+      d3.select(element).attr("fill", this.colorHover); // Show tooltip
 
-      _this.svg.append("g").call(_this.xAxis);
+      const tooltip = d3.select(this.selector + " .tooltip").attr("opacity", 1).attr("transform", "translate(".concat(this.xScale(new Date(xVal)), ", ").concat(this.yScale(yVal), ")")); // Substitute the values in the tooltip
 
-      _this.svg.append("g").call(_this.yAxis);
+      const text1 = d3.select(this.selector + " .tooltip .date").text("Date: " + this.dateFormater(xVal));
+      const text2 = d3.select(this.selector + " .tooltip .cases").text("Cases: " + yVal); // Calculate & adjust the width of the tooltip
 
-      _this.svg.append("text").call(_this.xLabel);
-
-      _this.svg.append("text").call(_this.yLabel);
-    });
-
-    _defineProperty(this, "showDetails", function (e, d) {
-      var element = e.target;
-      var xVal = d.x || d[0];
-      var yVal = d.y || d[1]; // Show Hover color on the bar
-
-      d3.select(element).attr("fill", _this.colorHover); // Show tooltip
-
-      var tooltip = d3.select(_this.selector + " .tooltip").attr("opacity", 1).attr("transform", "translate(".concat(_this.xScale(new Date(xVal)), ", ").concat(_this.yScale(yVal), ")")); // Substitute the values in the tooltip
-
-      var text1 = d3.select(_this.selector + " .tooltip .date").text("Date: " + _this.dateFormater(xVal));
-      var text2 = d3.select(_this.selector + " .tooltip .cases").text("Cases: " + yVal); // Calculate & adjust the width of the tooltip
-
-      var boxWidth = 6 + d3.max([text1.node().getComputedTextLength(), text2.node().getComputedTextLength()]);
-      d3.select(_this.selector + " .tooltip rect").attr("width", boxWidth);
-      var originX = boxWidth / 2;
-      var originY = _this.tooltipHeight;
-      var triangleWidth = 15;
-      var triangleHeight = 15;
-      var midX = originX + triangleWidth - triangleWidth / 2;
-      var shift = triangleWidth / 2;
-      var polyData = [[originX - shift, originY], [originX + triangleWidth - shift, originY], [midX - shift, originY + triangleHeight]];
-      var line = d3.line();
-      var trianglePath = line(polyData);
+      const boxWidth = 6 + d3.max([text1.node().getComputedTextLength(), text2.node().getComputedTextLength()]);
+      d3.select(this.selector + " .tooltip rect").attr("width", boxWidth);
+      const originX = boxWidth / 2;
+      const originY = this.tooltipHeight;
+      const triangleWidth = 15;
+      const triangleHeight = 15;
+      const midX = originX + triangleWidth - triangleWidth / 2;
+      const shift = triangleWidth / 2;
+      const polyData = [[originX - shift, originY], [originX + triangleWidth - shift, originY], [midX - shift, originY + triangleHeight]];
+      const line = d3.line();
+      const trianglePath = line(polyData);
       tooltip.append("path").attr("d", trianglePath).style("fill", "#eeeeee").style("fill-opacity", 0.9);
-      tooltip.attr("transform", "translate(".concat(_this.xScale(new Date(xVal)) - (midX - shift), ", ").concat(_this.yScale(yVal) - (originY + triangleHeight), ")")); // .append("circle")
+      tooltip.attr("transform", "translate(".concat(this.xScale(new Date(xVal)) - (midX - shift), ", ").concat(this.yScale(yVal) - (originY + triangleHeight), ")")); // .append("circle")
       // .attr("cx", midX - shift)
       // .attr("cy", originY + triangleHeight)
       // .attr("r", 5)
       // .attr("fill", "skyblue");
     });
 
-    _defineProperty(this, "clearDetails", function (e, d) {
-      var element = e.target;
-      d3.select(element).attr("fill", _this.color);
-      d3.select(_this.selector + " .tooltip").attr("opacity", 0);
+    _defineProperty(this, "clearDetails", (e, d) => {
+      const element = e.target;
+      d3.select(element).attr("fill", this.color);
+      d3.select(this.selector + " .tooltip").attr("opacity", 0);
     });
 
-    var width = config.width,
-        height = config.height,
-        marginX = config.marginX,
-        marginY = config.marginY,
-        marginTop = config.marginTop,
-        marginBottom = config.marginBottom,
-        marginLeft = config.marginLeft,
-        marginRight = config.marginRight;
+    const {
+      width,
+      height,
+      marginX,
+      marginY,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight
+    } = config;
     this.tooltipHeight = 45;
     this.selector = selector;
     this.svg = d3.select(selector).attr("width", width).attr("height", height).style("border", "1px solid #CCCCCC9A");
     this.x = x || [0, 1];
     this.y = y || [0, 1];
-    this.maxY = d3.max(y, function (d) {
-      return d;
-    });
+    this.maxY = d3.max(y, d => d);
     this.width = width || 700;
     this.height = height || 350;
     this.marginX = marginX || 50;
@@ -31070,178 +31030,124 @@ var Chart = /*#__PURE__*/function () {
     this._xLabel = xLabel || "x-label";
     this._yLabel = yLabel || "y-label";
     this.yScale = d3.scaleLinear().domain([0, this.maxY]).range([this.height - this.marginBottom * 3, this.marginTop]).nice();
-    this.xScale = d3.scaleTime().domain(d3.extent(x, function (d) {
-      return d;
-    })).range([this.marginLeft * 3, this.width - this.marginRight * 3]);
+    this.xScale = d3.scaleTime().domain(d3.extent(x, d => d)).range([this.marginLeft * 3, this.width - this.marginRight * 3]);
     this.color = d3.rgb(color).darker(0.3) || "gray";
     this.colorHover = color;
     this.dateFormater = d3.timeFormat("%d %b %Y");
     this.valFormater = d3.format(".2s");
   }
 
-  _createClass(Chart, [{
-    key: "drawToolTip",
-    value: function drawToolTip() {
-      var tooltipHeight = this.tooltipHeight;
-      var tooltipRoundness = 3;
-      var dateOffset = tooltipHeight / 2 / 2;
-      var casesOffset = dateOffset * 3;
-      var tooltip = d3.select(this.selector).append("g").attr("class", "tooltip").attr("opacity", 0).style("pointer-events", "none");
-      tooltip.append("rect").attr("width", 80).attr("height", tooltipHeight).attr("rx", tooltipRoundness).attr("ry", tooltipRoundness) // .attr("x", -3)
-      // .attr("y", -10)
-      .style("fill", "#eeeeee").style("fill-opacity", 0.9); // .style("stroke", "gray")
-      // .style("stroke-opacity", 0.5);
+  drawToolTip() {
+    const tooltipHeight = this.tooltipHeight;
+    const tooltipRoundness = 3;
+    const dateOffset = tooltipHeight / 2 / 2;
+    const casesOffset = dateOffset * 3;
+    const tooltip = d3.select(this.selector).append("g").attr("class", "tooltip").attr("opacity", 0).style("pointer-events", "none");
+    tooltip.append("rect").attr("width", 80).attr("height", tooltipHeight).attr("rx", tooltipRoundness).attr("ry", tooltipRoundness) // .attr("x", -3)
+    // .attr("y", -10)
+    .style("fill", "#eeeeee").style("fill-opacity", 0.9); // .style("stroke", "gray")
+    // .style("stroke-opacity", 0.5);
 
-      tooltip.append("text").attr("class", "name");
-      tooltip.append("text").attr("class", "date").attr("x", 3).attr("y", dateOffset + 3);
-      tooltip.append("text").attr("class", "cases").attr("x", 3).attr("y", casesOffset + 3);
-    } // Hover handlers
+    tooltip.append("text").attr("class", "name");
+    tooltip.append("text").attr("class", "date").attr("x", 3).attr("y", dateOffset + 3);
+    tooltip.append("text").attr("class", "cases").attr("x", 3).attr("y", casesOffset + 3);
+  } // Hover handlers
 
-  }]);
 
-  return Chart;
-}(); // =============================== //
+} // =============================== //
 // -->     Bar Chart Class    <--  //
 // =============================== //
 
 
-var BarChart = /*#__PURE__*/function (_Chart) {
-  _inherits(BarChart, _Chart);
-
-  var _super = _createSuper(BarChart);
-
+class BarChart extends Chart {
   // configuration and data
-  function BarChart(_ref2) {
-    var _this2;
-
-    var selector = _ref2.selector,
-        x = _ref2.x,
-        y = _ref2.y,
-        xLabel = _ref2.xLabel,
-        yLabel = _ref2.yLabel,
-        color = _ref2.color,
-        config = _ref2.config;
-
-    _classCallCheck(this, BarChart);
-
-    _this2 = _super.call(this, {
-      selector: selector,
-      x: x,
-      y: y,
-      xLabel: xLabel,
-      yLabel: yLabel,
-      color: color,
-      config: config
+  constructor(_ref2) {
+    let {
+      selector,
+      x,
+      y,
+      xLabel,
+      yLabel,
+      color,
+      config
+    } = _ref2;
+    super({
+      selector,
+      x,
+      y,
+      xLabel,
+      yLabel,
+      color,
+      config
     });
-    _this2.xScaleBand = d3.scaleBand().domain(_this2.x).range([_this2.marginLeft * 3, _this2.width - _this2.marginRight * 2]).padding(0.1);
-    return _this2;
+    this.xScaleBand = d3.scaleBand().domain(this.x).range([this.marginLeft * 3, this.width - this.marginRight * 2]).padding(0.1);
   }
 
-  _createClass(BarChart, [{
-    key: "draw",
-    value: function draw() {
-      var _this3 = this;
+  draw() {
+    this.drawChartVeiw(); // Draw bars
 
-      this.drawChartVeiw(); // Draw bars
+    this.svg.append("g").attr("fill", this.color).selectAll("rect").data(this.x.map((d, i) => {
+      return {
+        x: d,
+        y: this.y[i]
+      };
+    })).join("rect").attr("class", (b, i) => "bar" + i).attr("x", d => this.xScale(new Date(d.x)) - this.xScaleBand.bandwidth() / 2).attr("y", d => this.yScale(d.y)).attr("rx", 1).attr("height", d => this.yScale(0) - this.yScale(d.y)).attr("width", this.xScaleBand.bandwidth()).on("mouseover", this.showDetails).on("mouseleave", this.clearDetails);
+    this.drawToolTip();
+  }
 
-      this.svg.append("g").attr("fill", this.color).selectAll("rect").data(this.x.map(function (d, i) {
-        return {
-          x: d,
-          y: _this3.y[i]
-        };
-      })).join("rect").attr("class", function (b, i) {
-        return "bar" + i;
-      }).attr("x", function (d) {
-        return _this3.xScale(new Date(d.x)) - _this3.xScaleBand.bandwidth() / 2;
-      }).attr("y", function (d) {
-        return _this3.yScale(d.y);
-      }).attr("rx", 1).attr("height", function (d) {
-        return _this3.yScale(0) - _this3.yScale(d.y);
-      }).attr("width", this.xScaleBand.bandwidth()).on("mouseover", this.showDetails).on("mouseleave", this.clearDetails);
-      this.drawToolTip();
-    }
-  }]);
-
-  return BarChart;
-}(Chart); // =============================== //
+} // =============================== //
 // -->    Line Chart Class    <--  //
 // =============================== //
 
 
 exports.BarChart = BarChart;
 
-var LineChart = /*#__PURE__*/function (_Chart2) {
-  _inherits(LineChart, _Chart2);
-
-  var _super2 = _createSuper(LineChart);
-
-  function LineChart(_ref3) {
-    var _this4;
-
-    var selector = _ref3.selector,
-        x = _ref3.x,
-        y = _ref3.y,
-        xLabel = _ref3.xLabel,
-        yLabel = _ref3.yLabel,
-        color = _ref3.color,
-        config = _ref3.config;
-
-    _classCallCheck(this, LineChart);
-
-    _this4 = _super2.call(this, {
-      selector: selector,
-      x: x,
-      y: y,
-      xLabel: xLabel,
-      yLabel: yLabel,
-      color: color,
-      config: config
+class LineChart extends Chart {
+  constructor(_ref3) {
+    let {
+      selector,
+      x,
+      y,
+      xLabel,
+      yLabel,
+      color,
+      config
+    } = _ref3;
+    super({
+      selector,
+      x,
+      y,
+      xLabel,
+      yLabel,
+      color,
+      config
     });
-    _this4.area = d3.area().x(function (d) {
-      return _this4.xScale(d[0]);
-    }).y(function (d) {
-      return _this4.yScale(d[1]);
-    }).y1(_this4.yScale(0)) // scale is necessary because chart is inverted
+    this.area = d3.area().x(d => this.xScale(d[0])).y(d => this.yScale(d[1])).y1(this.yScale(0)) // scale is necessary because chart is inverted
     .curve(d3.curveMonotoneX);
-    _this4.line = _this4.area.lineX0();
-    _this4.circle = d3.symbol().type(d3.symbolCircle).size(75);
-    return _this4;
+    this.line = this.area.lineX0();
+    this.circle = d3.symbol().type(d3.symbolCircle).size(75);
   }
 
-  _createClass(LineChart, [{
-    key: "draw",
-    value: function draw() {
-      var _this5 = this;
+  draw() {
+    this.drawChartVeiw(); // draw chart
 
-      this.drawChartVeiw(); // draw chart
+    const svgDefs = this.svg.append("defs");
+    const mainGradient = svgDefs.append("linearGradient").attr("id", "".concat(this.selector.slice(1), "-mainGradient")).attr("gradientTransform", "rotate(90)");
+    this.color.opacity = 0.5;
+    mainGradient.append("stop").attr("class", "stop-top").attr("offset", "0").style("stop-color", this.color);
+    this.color.opacity = 0;
+    mainGradient.append("stop").attr("class", "stop-bottom").attr("offset", "1").style("stop-color", this.color); // Draw line
 
-      var svgDefs = this.svg.append("defs");
-      var mainGradient = svgDefs.append("linearGradient").attr("id", "".concat(this.selector.slice(1), "-mainGradient")).attr("gradientTransform", "rotate(90)");
-      this.color.opacity = 0.5;
-      mainGradient.append("stop").attr("class", "stop-top").attr("offset", "0").style("stop-color", this.color);
-      this.color.opacity = 0;
-      mainGradient.append("stop").attr("class", "stop-bottom").attr("offset", "1").style("stop-color", this.color); // Draw line
+    this.color.opacity = 1;
+    this.svg.append("path").datum(this.x.map((d, i) => [d, this.y[i]])).attr("class", "line").attr("d", this.line).style("stroke", this.color).style("fill", "none"); // Draw area
 
-      this.color.opacity = 1;
-      this.svg.append("path").datum(this.x.map(function (d, i) {
-        return [d, _this5.y[i]];
-      })).attr("class", "line").attr("d", this.line).style("stroke", this.color).style("fill", "none"); // Draw area
+    this.svg.append("path").datum(this.x.map((d, i) => [d, this.y[i]])).attr("class", "area").attr("d", this.area).style("fill", "url(#".concat(this.selector.slice(1), "-mainGradient)")); // Draw Circles (dots)
 
-      this.svg.append("path").datum(this.x.map(function (d, i) {
-        return [d, _this5.y[i]];
-      })).attr("class", "area").attr("d", this.area).style("fill", "url(#".concat(this.selector.slice(1), "-mainGradient)")); // Draw Circles (dots)
+    this.svg.selectAll("path.point").data(this.x.map((d, i) => [d, this.y[i]])).join("path").attr("class", "point").attr("d", this.circle).style("fill", this.color).attr("transform", k => "translate(".concat([this.xScale(k[0]), this.yScale(k[1])], ")")).on("mouseover", this.showDetails).on("mouseleave", this.clearDetails);
+    this.drawToolTip();
+  }
 
-      this.svg.selectAll("path.point").data(this.x.map(function (d, i) {
-        return [d, _this5.y[i]];
-      })).join("path").attr("class", "point").attr("d", this.circle).style("fill", this.color).attr("transform", function (k) {
-        return "translate(".concat([_this5.xScale(k[0]), _this5.yScale(k[1])], ")");
-      }).on("mouseover", this.showDetails).on("mouseleave", this.clearDetails);
-      this.drawToolTip();
-    }
-  }]);
-
-  return LineChart;
-}(Chart);
+}
 
 exports.LineChart = LineChart;
 },{"d3":"../node_modules/d3/index.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
@@ -38254,29 +38160,29 @@ picker.setDate(new Date()); // =============================== //
 // =============================== //
 // Global chart settings
 
-var ratio = {
+const ratio = {
   width: 16,
   height: 9
 };
-var chartLaptop = {
+const chartLaptop = {
   width: ratio.width * 60,
   height: ratio.height * 60,
   marginX: 40,
   marginY: 25
 };
-var chartTablet = {
+const chartTablet = {
   width: ratio.width * 47,
   height: ratio.height * 47,
   marginX: 40,
   marginY: 25
 };
-var chartMobile = {
+const chartMobile = {
   width: ratio.width * 32,
   height: ratio.height * 32,
   marginX: 20,
   marginY: 20
 };
-var chartMobileSl = {
+const chartMobileSl = {
   width: ratio.width * 23,
   height: ratio.height * 35,
   marginX: 20,
@@ -38284,14 +38190,14 @@ var chartMobileSl = {
   marginRight: 15
 }; // Fetch the data then draw the charts
 
-var data = [];
-var dateArr = [];
-var chart = {};
-var currentChart = {};
-d3.json("/api/cases").then(function (cases) {
+let data = [];
+let dateArr = [];
+let chart = {};
+let currentChart = {};
+d3.json("/api/cases").then(cases => {
   // Prepare data
-  var minDate = new Date(cases[0].date);
-  var maxDate = new Date(cases[cases.length - 1].date); // const event = new Date(); // get current date
+  const minDate = new Date(cases[0].date);
+  const maxDate = new Date(cases[cases.length - 1].date); // const event = new Date(); // get current date
   // event.setHours(0, 0, 0);  // reset time to 00:00:00
   // console.log(new Date(2021, 0, 26)); // alternative way
   // expected output in this format: Tue Jan 26 2021 00:00:00 GMT+1100 (Australian Eastern Daylight Time)
@@ -38299,7 +38205,7 @@ d3.json("/api/cases").then(function (cases) {
   dateArr = d3.timeDay.range(new Date("2020-12-31"), maxDate);
   console.log(dateArr[0]);
   console.log(new Date());
-  data = dateArr.map(function (d, i) {
+  data = dateArr.map((d, i) => {
     return _objectSpread(_objectSpread({}, cases[i]), {}, {
       date: d
     });
@@ -38308,98 +38214,70 @@ d3.json("/api/cases").then(function (cases) {
   window.addEventListener("resize", changeChartSettings);
 });
 
-var drawCharts = function drawCharts() {
+const drawCharts = () => {
   chart = currentChart; // Create bar charts
 
-  var casesChart = new _chartClass.BarChart({
+  const casesChart = new _chartClass.BarChart({
     selector: ".cases-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.newCases;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.newCases),
     xLabel: "Date",
     yLabel: "Cases",
     color: "#80E7FF"
   });
-  var deathsChart = new _chartClass.BarChart({
+  const deathsChart = new _chartClass.BarChart({
     selector: ".deaths-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.newDeaths;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.newDeaths),
     xLabel: "Date",
     yLabel: "Deaths",
     color: "#FF5F56"
   });
-  var recoveriesChart = new _chartClass.BarChart({
+  const recoveriesChart = new _chartClass.BarChart({
     selector: ".recoveries-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.newRecoveries;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.newRecoveries),
     xLabel: "Date",
     yLabel: "Recoveries",
     color: "#25C940"
   });
-  var testsChart = new _chartClass.BarChart({
+  const testsChart = new _chartClass.BarChart({
     selector: ".tests-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.newTests;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.newTests),
     xLabel: "Date",
     yLabel: "Tests",
     color: "#587E8B"
   }); // Create line charts
 
-  var totalCases = 0;
-  var totalCasesChart = new _chartClass.LineChart({
+  let totalCases = 0;
+  const totalCasesChart = new _chartClass.LineChart({
     selector: ".total-cases-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return totalCases = totalCases + d.newCases;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => totalCases = totalCases + d.newCases),
     xLabel: "Date",
     yLabel: "Total Cases",
     color: "#A5A5A5"
   });
-  var activeCasesChart = new _chartClass.LineChart({
+  const activeCasesChart = new _chartClass.LineChart({
     selector: ".active-cases-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.activeCases;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.activeCases),
     xLabel: "Date",
     yLabel: "Active Cases",
     color: "#80E7FF"
   });
-  var icuCasesChart = new _chartClass.LineChart({
+  const icuCasesChart = new _chartClass.LineChart({
     selector: ".icu-chart",
     config: chart,
-    x: data.map(function (d) {
-      return d.date;
-    }),
-    y: data.map(function (d) {
-      return d.icu;
-    }),
+    x: data.map(d => d.date),
+    y: data.map(d => d.icu),
     xLabel: "Date",
     yLabel: "Serious Cases",
     color: "#FFBD2D"
@@ -38417,53 +38295,59 @@ var drawCharts = function drawCharts() {
 // =============================== //
 
 
-var form = document.querySelector("form");
+const form = document.querySelector("form");
 
-form.onsubmit = function (e) {
+form.onsubmit = async e => {
   e.preventDefault();
-  var date = picker.toString("YYYY-MM-DD");
-  var newCases = document.getElementById("new-cases").value;
-  var newDeaths = document.getElementById("new-deaths").value;
-  var newRecoveries = document.getElementById("new-recoveries").value;
-  var newTests = document.getElementById("new-tests").value;
-  var activeCases = document.getElementById("active-cases").value;
-  var icu = document.getElementById("icu").value;
+  const date = picker.toString("YYYY-MM-DD");
+  const newCases = document.getElementById("new-cases").value;
+  const newDeaths = document.getElementById("new-deaths").value;
+  const newRecoveries = document.getElementById("new-recoveries").value;
+  const newTests = document.getElementById("new-tests").value;
+  const activeCases = document.getElementById("active-cases").value;
+  const icu = document.getElementById("icu").value;
   console.log({
-    date: date,
-    newCases: newCases,
-    newDeaths: newDeaths,
-    newRecoveries: newRecoveries,
-    newTests: newTests,
-    activeCases: activeCases,
-    icu: icu
+    date,
+    newCases,
+    newDeaths,
+    newRecoveries,
+    newTests,
+    activeCases,
+    icu
   });
-  console.log(e);
-  fetch("/api/add-record", {
+  const res = await fetch("/api/add-record", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      date: date,
-      newCases: newCases,
-      newDeaths: newDeaths,
-      newRecoveries: newRecoveries,
-      newTests: newTests,
-      activeCases: activeCases,
-      icu: icu
+      date,
+      newCases,
+      newDeaths,
+      newRecoveries,
+      newTests,
+      activeCases,
+      icu
     })
-  }).then(function (res) {
-    return res.json();
-  }).then(function (res) {
-    console.log(res); // location.reload()
   });
+  const json = await res.json();
+
+  if (res.status > 201) {
+    console.log(json);
+    document.querySelector(".msg").innerHTML = "<p class=\"error-msg\">".concat(json.error, "</p>");
+  } else {
+    document.querySelector(".msg").innerHTML = "<p class=\"successful-msg\">New record was added!</p>";
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
 }; // =============================== //
 // --> Chart Settings Handler <--  //
 // =============================== //
 
 
-var changeChartSettings = function changeChartSettings() {
-  var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+const changeChartSettings = () => {
+  let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
   if (vw > 1100) chart = chartLaptop;else if (vw > 800) chart = chartTablet;else if (vw > 500) chart = chartMobile;else chart = chartMobileSl;
 
   if (chart.width !== currentChart.width) {
@@ -38500,7 +38384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65479" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61677" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

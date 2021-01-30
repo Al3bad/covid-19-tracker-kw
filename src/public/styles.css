@@ -147,6 +147,15 @@ form {
   align-items: center;
 }
 
+.error-msg {
+  margin-bottom: 1rem;
+  color: rgb(255, 109, 109)
+}
+.successful-msg {
+  margin-bottom: 1rem;
+  color: rgb(38, 163, 38)
+}
+
 input {
   padding: 5px;
   border: none;

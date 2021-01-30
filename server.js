@@ -112,7 +112,6 @@ const server = http.createServer((req, res) => {
 
         console.log("Status Code: ", statusCode);
         console.log("Headers: ", headers);
-        console.log("Error: ", payload.error);
 
         res.writeHead(statusCode, headers);
         res.end(payloadStr);
@@ -204,7 +203,7 @@ handlers.addRecord = async (data, callback) => {
     if (rowExists) throw { statusCode: 400, errorMessage: "Data for this date already exists" };
     else {
       await Case.create(data.body);
-      callback(201, { errorMessage: "New record was added!" });
+      callback(201, { msg: "New record was added!" });
     }
   } catch (err) {
     callback(err.statusCode || 500, { error: err.errorMessage || "Server Error" });

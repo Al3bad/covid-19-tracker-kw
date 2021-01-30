@@ -171,7 +171,7 @@ const drawCharts = () => {
 
 const form = document.querySelector("form");
 
-form.onsubmit = (e) => {
+form.onsubmit = async (e) => {
   e.preventDefault();
 
   const date = picker.toString("YYYY-MM-DD");
@@ -183,17 +183,23 @@ form.onsubmit = (e) => {
   const icu = document.getElementById("icu").value;
   console.log({ date, newCases, newDeaths, newRecoveries, newTests, activeCases, icu });
 
-  console.log(e);
-  fetch("/api/add-record", {
+  const res = await fetch("/api/add-record", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ date, newCases, newDeaths, newRecoveries, newTests, activeCases, icu }),
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log(res);
-      // location.reload()
-    });
+  });
+
+  const json = await res.json();
+
+  if (res.status > 201) {
+    console.log(json);
+    document.querySelector(".msg").innerHTML = `<p class="error-msg">${json.error}</p>`;
+  } else {
+    document.querySelector(".msg").innerHTML = `<p class="successful-msg">New record was added!</p>`;
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
 };
 
 // =============================== //
