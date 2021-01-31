@@ -2,7 +2,7 @@
 
 ### Description
 
-This project displays information about COVID-19 cases in Kuwait. All the data were taken from the official instagram account of [Ministry of Health](https://www.instagram.com/kuwait_moh/).
+This project displays information (presented in charts) about COVID-19 cases in Kuwait. All the data were taken from the official instagram account of [Ministry of Health](https://www.instagram.com/kuwait_moh/).
 
 This project was built to put the knowledge I learned about d3.js library and pure node.js server into practice, and it is not production ready but feel free to fork it, explore it and play with it.
 
