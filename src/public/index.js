@@ -30975,8 +30975,8 @@ class Chart {
 
       const tooltip = d3.select(this.selector + " .tooltip").attr("opacity", 1).attr("transform", "translate(".concat(this.xScale(new Date(xVal)), ", ").concat(this.yScale(yVal), ")")); // Substitute the values in the tooltip
 
-      const text1 = d3.select(this.selector + " .tooltip .date").text("Date: " + this.dateFormater(xVal));
-      const text2 = d3.select(this.selector + " .tooltip .cases").text("Cases: " + yVal); // Calculate & adjust the width of the tooltip
+      const text1 = d3.select(this.selector + " .tooltip .date").text(this.dateFormater(xVal));
+      const text2 = d3.select(this.selector + " .tooltip .cases").text(yVal); // Calculate & adjust the width of the tooltip
 
       const boxWidth = 6 + d3.max([text1.node().getComputedTextLength(), text2.node().getComputedTextLength()]);
       d3.select(this.selector + " .tooltip rect").attr("width", boxWidth);
@@ -38384,7 +38384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61677" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56387" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

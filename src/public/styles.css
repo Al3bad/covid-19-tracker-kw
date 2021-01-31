@@ -63,8 +63,25 @@ main .today {
 }
 
 main .today h3 {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   color: #284b63;
+}
+
+main .today h3 span {
+  margin-left: 5px;
+  padding-left: 10px;
+  position: relative;
+  color: #658ca7;
+}
+
+main .today h3 span::before {
+  content: "";
+  width: 1px;
+  height: 30px;
+  background: gray;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 main .today .today-grid {
@@ -149,11 +166,11 @@ form {
 
 .error-msg {
   margin-bottom: 1rem;
-  color: rgb(255, 109, 109)
+  color: rgb(255, 109, 109);
 }
 .successful-msg {
   margin-bottom: 1rem;
-  color: rgb(38, 163, 38)
+  color: rgb(38, 163, 38);
 }
 
 input {

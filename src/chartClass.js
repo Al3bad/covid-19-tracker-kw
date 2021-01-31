@@ -86,9 +86,6 @@ class Chart {
       )
       .call((g) => g.selectAll(".tick text").attr("x", -10).attr("dy", -5));
 
-    // _formatValues = () => {
-    //   d3.format(".2s")(42e6);
-    // }
 
   drawChartVeiw = () => {
     this.svg.node().innerHTML = "";
@@ -157,8 +154,8 @@ class Chart {
       .attr("transform", `translate(${this.xScale(new Date(xVal))}, ${this.yScale(yVal)})`);
 
     // Substitute the values in the tooltip
-    const text1 = d3.select(this.selector + " .tooltip .date").text("Date: " + this.dateFormater(xVal));
-    const text2 = d3.select(this.selector + " .tooltip .cases").text("Cases: " + yVal);
+    const text1 = d3.select(this.selector + " .tooltip .date").text(this.dateFormater(xVal));
+    const text2 = d3.select(this.selector + " .tooltip .cases").text(yVal);
 
     // Calculate & adjust the width of the tooltip
     const boxWidth = 6 + d3.max([text1.node().getComputedTextLength(), text2.node().getComputedTextLength()]);

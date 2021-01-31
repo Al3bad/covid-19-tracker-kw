@@ -163,6 +163,8 @@ handlers.home = async (data, callback) => {
     });
 
     const today = result[0];
+    const date = new Date(today.date);
+    today.date = date.toGMTString().slice(0, 16);;
 
     console.log(today);
 
