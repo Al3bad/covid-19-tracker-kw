@@ -3,8 +3,6 @@ import { readdir } from "node:fs/promises";
 
 // const bundler = require("./backend/bundler");
 import { createRecordTable, insertRecord, getRecords } from "./backend/db";
-// const init = require("./backend/resetDB");
-// const logger = require("./backend/logger");
 
 // Server configuration
 const port = process.env.PORT || 3000;
